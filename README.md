@@ -104,11 +104,15 @@ sudo docker run -it --entrypoint=bash -v ./head-data:/data alloranetwork/allora-
 ```
 sudo docker run -it --entrypoint=bash -v ./worker-data:/data alloranetwork/allora-inference-base:latest -c "mkdir -p /data/keys && (cd /data/keys && allora-keys)"
 ```
+### Node-id alalım
+```
+cat $HOME/allora-chain/basic-coin-prediction-node/head-data/keys/identity
+```
 ### Dosyamızı güncelleyelim
 ```
 rm -rf docker-compose.yml && nano docker-compose.yml
 ```
-NOT: cüzdan kelimelerini yaz kısmına tabiki kelimeleri yaz :D
+NOT: cüzdan kelimelerini yaz kısmına tabiki kelimeleri yaz :D vede node-id-yazın yazan yere yukarda aldığımızı yazın.
 ```
 version: '3'
 
@@ -176,7 +180,7 @@ services:
         allora-node --role=worker --peer-db=/data/peerdb --function-db=/data/function-db \
           --runtime-path=/app/runtime --runtime-cli=bls-runtime --workspace=/data/workspace \
           --private-key=/data/keys/priv.bin --log-level=debug --port=9011 \
-          --boot-nodes=/ip4/172.25.0.100/tcp/9010/p2p/$(cat /root/allora-chain/basic-coin-prediction-node/head-data/keys/identity) \
+          --boot-nodes=/ip4/172.25.0.100/tcp/9010/p2p/node-id-yazın \
           --topic=allora-topic-1-worker \
           --allora-chain-key-name=testkey \
           --allora-chain-restore-mnemonic='cüzdan kelimelerini yaz' \
