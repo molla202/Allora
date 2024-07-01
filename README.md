@@ -176,7 +176,7 @@ services:
         allora-node --role=worker --peer-db=/data/peerdb --function-db=/data/function-db \
           --runtime-path=/app/runtime --runtime-cli=bls-runtime --workspace=/data/workspace \
           --private-key=/data/keys/priv.bin --log-level=debug --port=9011 \
-          --boot-nodes=/ip4/172.25.0.100/tcp/9010/p2p/$(cat /root/aloora-chain/basic-coin-prediction-node/head-data/keys/identity) \
+          --boot-nodes=/ip4/172.25.0.100/tcp/9010/p2p/$(cat /root/allora-chain/basic-coin-prediction-node/head-data/keys/identity) \
           --topic=allora-topic-1-worker \
           --allora-chain-key-name=testkey \
           --allora-chain-restore-mnemonic='cüzdan kelimelerini yaz' \
