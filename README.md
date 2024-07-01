@@ -2,12 +2,29 @@
 
 
 
-Requirements : 
-Operating System: Ubuntu 22.04
-CPU: Minimum of 1/2 core.
-Memory: 2 to 4 GB.
-Storage: SSD or NVMe with at least 5GB of space.
+ * [Topluluk kanalımız](https://t.me/corenodechat)<br>
+ * [Topluluk Twitter](https://twitter.com/corenodeHQ)<br>
+ * [Allora Website](https://www.allora.network/)<br>
+ * [Blockchain Explorer](https://explorer.edgenet.allora.network/wallet/suggest)<br>
+ * [Discord](https://t.co/AdXUVjS3iF)<br>
+ * [Twitter](https://x.com/AlloraNetwork)<br>
+ * [APP](https://app.allora.network/points/campaigns)<br>
+ * [FAUCET](https://faucet.edgenet.allora.network/)<br>
 
+
+## 💻 Sistem Gereksinimleri
+| Bileşenler | Minimum Gereksinimler | 
+| ------------ | ------------ |
+| CPU |	2 çiğdemli |
+| RAM	| 4 çikotayt |
+| Storage	| 10+ GB SSD |
+
+
+`UYARI VE BİLGİLENDİRME : BU DÖKÜMAN AŞAĞIDA VERDİĞİM LİNKTEN BAKILAR DÜZENLENMİŞTİR. BAZI PROJELERLE ÇAKIŞMAMASI İÇİN ÖZENLE HAZIRLANMIŞTIR.(PORT DEĞİŞTİRME İÇERİR) tOPLULUĞMUZDAN FURKAN ARKADAŞIMIZIN DÖKÜMANIDIR(KRİPTO UZMANI) BEN SADECE BAZI DEĞİŞİKLİKLER YAPTIM.`
+
+`https://services.rpcdot.com/allora/worker-node`
+
+### Gereklilikler
 ```
 sudo apt update -y && sudo apt upgrade -y
 ```
@@ -66,13 +83,10 @@ allorad keys add testkey --recover
 ```
 ### Faucet
 
-Adresinizi öğrenmek için : https://app.allora.network/points/campaigns
-ağı eklemek için : https://explorer.edgenet.allora.network/wallet/suggest
-faucet : https://faucet.edgenet.allora.network/
+* Baştaki linklerde faucet var alalım. aynı zamanda baştaki linklerde app var işlemleri bitirdikten sonra cüzdanı keplr ekleyin ve app sitesine bağlanın. bağlanırkene ağı ekler zaten keplr eklemesse explorer kısmından eklersiniz.
 
 ### Worker 
 ```
-cd
 git clone https://github.com/allora-network/basic-coin-prediction-node
 cd basic-coin-prediction-node
 mkdir -p worker-data
