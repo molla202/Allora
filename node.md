@@ -101,25 +101,25 @@ sed -i -e "s|^minimum-gas-prices *=.*|minimum-gas-prices = \"0uallo\"|" $HOME/.a
 ```
 ### 🚧 Port ayarı
 ```
-echo "export G_PORT="51"" >> $HOME/.bash_profile
+echo "export A_PORT="51"" >> $HOME/.bash_profile
 source $HOME/.bash_profile
 ```
 ```
-sed -i.bak -e "s%:1317%:${G_PORT}317%g;
-s%:8080%:${G_PORT}080%g;
-s%:9090%:${G_PORT}090%g;
-s%:9091%:${G_PORT}091%g;
-s%:8545%:${G_PORT}545%g;
-s%:8546%:${G_PORT}546%g;
-s%:6065%:${G_PORT}065%g" $HOME/.allorad/config/app.toml
+sed -i.bak -e "s%:1317%:${A_PORT}317%g;
+s%:8080%:${A_PORT}080%g;
+s%:9090%:${A_PORT}090%g;
+s%:9091%:${A_PORT}091%g;
+s%:8545%:${A_PORT}545%g;
+s%:8546%:${A_PORT}546%g;
+s%:6065%:${A_PORT}065%g" $HOME/.allorad/config/app.toml
 ```
 ```
-sed -i.bak -e "s%:26658%:${G_PORT}658%g;
-s%:26657%:${G_PORT}657%g;
-s%:6060%:${G_PORT}060%g;
-s%:26656%:${G_PORT}656%g;
-s%^external_address = \"\"%external_address = \"$(wget -qO- eth0.me):${G_PORT}656\"%;
-s%:26660%:${G_PORT}660%g" $HOME/.allorad/config/config.toml
+sed -i.bak -e "s%:26658%:${A_PORT}658%g;
+s%:26657%:${A_PORT}657%g;
+s%:6060%:${A_PORT}060%g;
+s%:26656%:${A_PORT}656%g;
+s%^external_address = \"\"%external_address = \"$(wget -qO- eth0.me):${A_PORT}656\"%;
+s%:26660%:${A_PORT}660%g" $HOME/.allorad/config/config.toml
 ```
 ### 🚧 Peer
 ```
