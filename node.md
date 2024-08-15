@@ -78,7 +78,7 @@ EOF
 ```
 ```
 sudo systemctl daemon-reload
-sudo systemctl enable selfchaind
+sudo systemctl enable allorad
 ```
 ### 🚧 İnit
 ```
