@@ -44,12 +44,12 @@ cd allora-chain
 make build
 ```
 ```
-mkdir -p $HOME/.allora/cosmovisor/genesis/bin
-mv /root/allora-chain/build/allorad $HOME/.allora/cosmovisor/genesis/bin/
+mkdir -p $HOME/.allorad/cosmovisor/genesis/bin
+mv /root/allora-chain/build/allorad $HOME/.allorad/cosmovisor/genesis/bin/
 ```
 ```
-sudo ln -s $HOME/.allora/cosmovisor/genesis $HOME/.allora/cosmovisor/current -f
-sudo ln -s $HOME/.allora/cosmovisor/current/bin/allorad /usr/local/bin/allorad -f
+sudo ln -s $HOME/.allorad/cosmovisor/genesis $HOME/.allorad/cosmovisor/current -f
+sudo ln -s $HOME/.allorad/cosmovisor/current/bin/allorad /usr/local/bin/allorad -f
 ```
 ```
 go install cosmossdk.io/tools/cosmovisor/cmd/cosmovisor@v1.5.0
@@ -67,10 +67,10 @@ ExecStart=$(which cosmovisor) run start
 Restart=on-failure
 RestartSec=10
 LimitNOFILE=65535
-Environment="DAEMON_HOME=$HOME/.allora"
+Environment="DAEMON_HOME=$HOME/.allorad"
 Environment="DAEMON_NAME=allorad"
 Environment="UNSAFE_SKIP_BACKUP=true"
-Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:$HOME/.allora/cosmovisor/current/bin"
+Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:$HOME/.allorad/cosmovisor/current/bin"
 
 [Install]
 WantedBy=multi-user.target
@@ -87,23 +87,45 @@ allorad init yaz-bura --chain-id allora-testnet-1 --default-denom uallo
 ```
 allorad config set client chain-id allora-testnet-1
 allorad config set client keyring-backend test
-allorad config set client node tcp://localhost:11757
+allorad config set client node tcp://localhost:51657
 ```
 * Moniker adını yaz
 
 ### 🚧 Genesis addrbook
 ```
-curl -Ls https://raw.githubusercontent.com/allora-network/networks/main/allora-testnet-1/genesis.json > $HOME/.allora/config/genesis.json
+curl -Ls https://raw.githubusercontent.com/allora-network/networks/main/allora-testnet-1/genesis.json > $HOME/.allorad/config/genesis.json
 ```
 ### 🚧 Gas ayarı
 ```
-sed -i -e "s|^minimum-gas-prices *=.*|minimum-gas-prices = \"0uallo\"|" $HOME/.selfchain/config/app.toml
+sed -i -e "s|^minimum-gas-prices *=.*|minimum-gas-prices = \"0uallo\"|" $HOME/.allorad/config/app.toml
+```
+### 🚧 Port ayarı
+```
+echo "export G_PORT="51"" >> $HOME/.bash_profile
+source $HOME/.bash_profile
+```
+```
+sed -i.bak -e "s%:1317%:${G_PORT}317%g;
+s%:8080%:${G_PORT}080%g;
+s%:9090%:${G_PORT}090%g;
+s%:9091%:${G_PORT}091%g;
+s%:8545%:${G_PORT}545%g;
+s%:8546%:${G_PORT}546%g;
+s%:6065%:${G_PORT}065%g" $HOME/.allorad/config/app.toml
+```
+```
+sed -i.bak -e "s%:26658%:${G_PORT}658%g;
+s%:26657%:${G_PORT}657%g;
+s%:6060%:${G_PORT}060%g;
+s%:26656%:${G_PORT}656%g;
+s%^external_address = \"\"%external_address = \"$(wget -qO- eth0.me):${G_PORT}656\"%;
+s%:26660%:${G_PORT}660%g" $HOME/.allorad/config/config.toml
 ```
 ### 🚧 Peer
 ```
 SEEDS="b825e8d944952e50afe5739fa4afa7cb16f11db9@seed-0-p2p.testnet-1.testnet.allora.network:32110,cc11f2c02f9dea5f3b86eec3e00ae373b7076ea4@seed-1-p2p.testnet-1.testnet.allora.network:32111"
 PEERS="11413d234e449ff3fefbad2df285a9b2b2601e0d@peer-0.testnet-1.testnet.allora.network:32120,89ec173c61da9b32c7344aacfe72cc62e0b743a0@peer-1.testnet-1.testnet.allora.network:32121"
-sed -i -e "s/^seeds *=.*/seeds = \"$SEEDS\"/; s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" $HOME/.selfchain/config/config.toml
+sed -i -e "s/^seeds *=.*/seeds = \"$SEEDS\"/; s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" $HOME/.allorad/config/config.toml
 ```
 ### config pruning
 ```
@@ -111,8 +133,8 @@ sed -i \
   -e 's|^pruning *=.*|pruning = "custom"|' \
   -e 's|^pruning-keep-recent *=.*|pruning-keep-recent = "100"|' \
   -e 's|^pruning-keep-every *=.*|pruning-keep-every = "0"|' \
-  -e 's|^pruning-interval *=.*|pruning-interval = "19"|' \
-  $HOME/.selfchain/config/app.toml
+  -e 's|^pruning-interval *=.*|pruning-interval = "10"|' \
+  $HOME/.allorad/config/app.toml
 ```
 ### 🚧 Snap
 ```
@@ -124,23 +146,17 @@ curl http://37.120.189.81/selfchain_mainnet/selfchain_snap.tar.lz4 | lz4 -dc - |
 cp $HOME/.selfchain/priv_validator_state.json.backup $HOME/.selfchain/data/priv_validator_state.json 
 ```
 
-### 🚧 Port ayarı
-```
-CUSTOM_PORT=117
 
-sed -i -e "s%^proxy_app = \"tcp://127.0.0.1:26658\"%proxy_app = \"tcp://127.0.0.1:${CUSTOM_PORT}58\"%; s%^laddr = \"tcp://127.0.0.1:26657\"%laddr = \"tcp://127.0.0.1:${CUSTOM_PORT}57\"%; s%^pprof_laddr = \"localhost:6060\"%pprof_laddr = \"localhost:${CUSTOM_PORT}60\"%; s%^laddr = \"tcp://0.0.0.0:26656\"%laddr = \"tcp://0.0.0.0:${CUSTOM_PORT}56\"%; s%^prometheus_listen_addr = \":26660\"%prometheus_listen_addr = \":${CUSTOM_PORT}66\"%" $HOME/.selfchain/config/config.toml
-sed -i -e "s%^address = \"tcp://0.0.0.0:1317\"%address = \"tcp://0.0.0.0:${CUSTOM_PORT}17\"%; s%^address = \":8080\"%address = \":${CUSTOM_PORT}80\"%; s%^address = \"localhost:9090\"%address = \"localhost:${CUSTOM_PORT}90\"%; s%^address = \"localhost:9091\"%address = \"localhost:${CUSTOM_PORT}91\"%" $HOME/.selfchain/config/app.toml
-```
 ### 🚧 Başlatalım
 Not: önce ufak bir peer ayarı gerekli
 ```
-nano $HOME/.selfchain/config/config.toml
+nano $HOME/.allorad/config/config.toml
 ```
-`handshake_timeout = "120s"`
-`dial_timeout = "120s"`
+mempool.max_txs_bytes 2097152
+mempool.size 1000
 ```
-sudo systemctl restart selfchaind
-journalctl -fu selfchaind -o cat
+sudo systemctl restart alloradd
+journalctl -fu allorad -o cat
 ```
 
 
